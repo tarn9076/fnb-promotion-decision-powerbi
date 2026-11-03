@@ -42,7 +42,7 @@ I designed the report around one decision: **which offers should the F&B team re
 | **Diagnosis & Action Plan** | F&B leadership | Root cause per promotion (discount depth / weekend demand / channel commission), recommended action, estimated impact, owners and success metric |
 
 ![Promotion Decisions](doc/img/02_decisions.png)
-![Diagnosis & Action Plan](doc/img/03_diagnosis.png)
+![Diagnosis & Action Plan](doc/img/03_diagnosis.PNG)
 
 ## 4. How I decided which offers to keep
 
