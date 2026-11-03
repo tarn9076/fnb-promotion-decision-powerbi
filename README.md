@@ -1,7 +1,7 @@
 # Which promotions should we stop before high season?
 ### A Power BI decision project — hotel F&B promotions, judged on contribution, not revenue
 
-![Executive page](docs/img/01_executive.png)
+![Executive page](doc/img/01_executive.png)
 
 **Role this was built for:** Data Analyst – Power BI (business-facing, with RLS and performance responsibilities).
 **Everything here is synthetic.** Hotel data is generated; stakeholder requests are simulated from real patterns in my current job. No employer data.
@@ -38,8 +38,8 @@ Three questions before opening Power BI:
 | **Promotion Decisions** | Director / Marketing / Finance | Which to continue, review, stop — why — and does the answer survive a different assumption? (what-if slider) |
 | **Diagnosis & Action Plan** | F&B leadership | Root cause per promotion (discount depth / weekend demand / channel commission), recommended action, estimated impact, owners and success metric |
 
-![Promotion Decisions](docs/img/02_decisions.png)
-![Diagnosis & Action Plan](docs/img/03_diagnosis.png)
+![Promotion Decisions](doc/img/02_decisions.png)
+![Diagnosis & Action Plan](doc/img/03_diagnosis.png)
 
 ## 4. The decision rule (one version, used in SQL, DAX and on the page)
 
@@ -72,7 +72,7 @@ A what-if parameter replaces the baseline estimate of *s* so Finance and Marketi
 - **Row-Level Security:** Outlet Manager (one outlet), Hotel GM (one hotel), Group. Tested with *View as* — screenshots in `/docs/rls`.
 - **Reconciliation:** CSV → SQLite → Power BI, 16,778 rows / 499,580 covers / ฿423,268,890 net revenue, exact at every layer.
 
-![RLS test — Outlet Manager sees one outlet](docs/img/rls_outlet_manager.png)
+![RLS test — Outlet Manager sees one outlet](doc/img/rls_outlet_manager.png)
 
 ## 6. What went wrong and was fixed (validation log)
 
