@@ -7,7 +7,6 @@
 
 > **Four of the seven offers are worth keeping.** For the other three, I estimate the restaurants would have earned about ฿992K more without the discounts, after food costs and commissions. Sunday Brunch is the one I'd redesign rather than drop: it served 28% more guests than on the same Sundays last year, but the 50% discount left only ฿155 per guest after those costs.
 
-**Role this was built for:** Data Analyst – Power BI (business-facing, with RLS and performance responsibilities).
 **Everything here is synthetic.** Hotel data is generated; stakeholder requests are simulated from real patterns in my current job. No employer data.
 
 ---
@@ -24,7 +23,7 @@ Three questions before opening Power BI:
 | What does "performed" mean — revenue, covers or profit? | "Revenue… but Finance says some promos lose money" |
 | Who else acts on it? | Marketing (runs promos), Finance (approves discounts), outlet managers, the GM |
 
-**Agreed need:** one view that tells leadership, per promotion, whether to **continue, review or stop the current offer** — judged on **contribution after discount, food cost and channel commission** — and that each outlet manager can open and see only their own outlets.
+I designed the report around one decision: **which offers should the F&B team renew, change or stop?** — judged on contribution after discount, food cost and channel commission, with each outlet manager seeing only their own outlets.
 
 ## 2. What the report says (Jan–Jun 2026, synthetic)
 
@@ -47,7 +46,7 @@ Three questions before opening Power BI:
 
 ## 4. How I decided which offers to keep
 
-I compared what the restaurant earned on promotion days with what I estimate it would have earned without the offer. The same rule runs in SQL, DAX and on the report page.
+I compared what the restaurant earned on promotion days with what I estimate it would have earned without the offer. SQL calculates the campaign metrics; DAX uses them to assign the verdict shown in Power BI.
 
 **Baseline covers** = covers on the **same weekday last year** (364 days back, Sunday vs Sunday), same outlet and meal period, on a day with no promotion. We estimate contribution without the offer using last year's matched covers and **this year's full-price contribution per cover on the promotion days** — last year sets the volume, this year sets the economics.
 
@@ -66,13 +65,13 @@ A what-if parameter replaces the baseline estimate of *s* so Finance and Marketi
 ## 5. How it is built
 
 ```
-/sql        01_views.sql — 3 views hold all business logic (JOIN, CTE, same-weekday-last-year baseline)
+/sql        01_views.sql — 3 views: baseline matching, campaign metrics, decision table
 /data       FnB_Dashboard_SampleData_v2.xlsx — synthetic source (9 tables) + CSV exports
 /pbix       FnB_Promo_Decision.pbix
 /doc/img    screenshots and RLS tests
 ```
 
-- **SQL:** SQLite — portable, no server needed; the same views run on SQL Server with minor syntax changes. Transformations stay in SQL; Power Query only types columns.
+- **SQL:** I used SQLite to match promotion dates to the same weekday last year and calculate the estimated contribution for each offer. Power Query only types columns.
 - **Model:** star schema — FactSales (date × hotel × outlet × meal × channel × promo) + FactBudget + 6 dimensions, 12 single-direction many-to-one relationships, auto-detect off.
 - **DAX:** measure table with display folders (Base / KPI / Promo decision); verdict, break-even share, incremental contribution, what-if parameter, dynamic summary text.
 - **Row-Level Security:** Outlet Manager (one outlet), Hotel GM (one hotel), Group. Tested with *View as* — screenshots in `/doc/img`.
@@ -80,14 +79,14 @@ A what-if parameter replaces the baseline estimate of *s* so Finance and Marketi
 
 ![RLS test — Outlet Manager sees one outlet](doc/img/rls_outlet_manager.png)
 
-## 6. What went wrong and was fixed
+## 6. What I found and how I handled it
 
 | # | Found | Fix |
 |---|---|---|
 | 1 | Baseline = average of all non-promo days → every promotion flagged Stop (seasonality) | Same weekday last year |
 | 2 | Break-even formula assumed every guest got the discount | With-promo vs without-promo contribution |
-| 3 | Power Query hard-coded column count; new view columns silently dropped | Columns=29, added to refresh checklist |
-| 4 | Verdicts did not respond to the month filter (decision view has no date grain) | Verdict blanks when the filtered period has no promo covers; documented that verdicts are evaluated over the full campaign window |
+| 3 | Power Query hard-coded column count; new view columns silently dropped | Set to 29 and added to the refresh checklist — still a fixed number, so a future column needs the same edit |
+| 4 | Verdicts did not respond to the month filter (decision view has no date grain) | Verdict blanks when the selected period has no promo covers; the page states that verdicts use the full campaign period — still a limitation, not a fix |
 | 5 | RLS filter placed on DimPromo removed all full-price rows | Filter on DimOutlet only; related the decision view to DimOutlet |
 | 6 | First impact estimate for the Brunch redesign double-counted (฿975K) | Recomputed from actual food cost per cover → ≈ ฿503K improvement vs current offer, same period, covers held constant |
 
@@ -95,9 +94,9 @@ A what-if parameter replaces the baseline estimate of *s* so Finance and Marketi
 
 Same-weekday-last-year is a comparison, not a control group — the uplift cannot be fully attributed to the promotion. Internal data is synthetic. No guest-level data, so the non-incremental share is inferred from volume. Campaign marketing spend and platform listing fees are not in *s\**, so it is an upper bound. Competitor prices are not yet included.
 
-## 8. Why a hotel project for a non-hotel role
+## 8. Why a hotel project
 
-I built this in the business I understand well enough to challenge a request. The method — clarify the decision, define a KPI the business trusts, estimate cannibalisation instead of arguing about it, secure data by role — is the same for a bank's card campaign, fee waiver or deposit-rate promotion: discount ↔ bonus rate, deal-platform commission ↔ channel acquisition cost, outlet-manager RLS ↔ branch RLS. For a cashback card, the same question is: how many of the customers who took the cashback would have spent anyway, and does the fee income from the rest cover it?
+I chose hotel promotions because pricing and discounts are decisions I work with. A bank could ask a similar question about cashback: how much extra spending did the offer encourage, and did the additional income cover the reward?
 
 ---
 *Thanyachat Theeranithithanatham · Bangkok · [LinkedIn](https://www.linkedin.com/in/thanyachat-theeranithithanatham-42a867198) · built Oct–Nov 2026*
