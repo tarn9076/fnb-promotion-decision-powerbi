@@ -72,7 +72,7 @@ A what-if parameter replaces the baseline estimate of *s* so Finance and Marketi
 /doc/img    screenshots and RLS tests
 ```
 
-- **SQL:** SQLite (company laptop, no rights for SQL Server — chose a tool that needs no admin). Transformations stay in SQL; Power Query only types columns.
+- **SQL:** SQLite — portable, no server needed; the same views run on SQL Server with minor syntax changes. Transformations stay in SQL; Power Query only types columns.
 - **Model:** star schema — FactSales (date × hotel × outlet × meal × channel × promo) + FactBudget + 6 dimensions, 12 single-direction many-to-one relationships, auto-detect off.
 - **DAX:** measure table with display folders (Base / KPI / Promo decision); verdict, break-even share, incremental contribution, what-if parameter, dynamic summary text.
 - **Row-Level Security:** Outlet Manager (one outlet), Hotel GM (one hotel), Group. Tested with *View as* — screenshots in `/doc/img`.
