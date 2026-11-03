@@ -100,4 +100,4 @@ Same-weekday-last-year is a comparison, not a control group — the uplift canno
 I built this in the business I understand well enough to challenge a request. The method — clarify the decision, define a KPI the business trusts, estimate cannibalisation instead of arguing about it, secure data by role — is the same for a bank's card campaign, fee waiver or deposit-rate promotion: discount ↔ bonus rate, deal-platform commission ↔ channel acquisition cost, outlet-manager RLS ↔ branch RLS. For a cashback card, the same question is: how many of the customers who took the cashback would have spent anyway, and does the fee income from the rest cover it?
 
 ---
-*Thanyachat Theeranithithanatham · Bangkok · [LinkedIn](https://www.linkedin.com/in/REPLACE-WITH-YOUR-HANDLE) · built Oct–Nov 2026*
+*Thanyachat Theeranithithanatham · Bangkok · [LinkedIn](https://www.linkedin.com/in/thanyachat-theeranithithanatham-42a867198) · built Oct–Nov 2026*
